@@ -104,4 +104,16 @@ module.exports = function(app) {
             });
     });
 
+    // This will remove an note by it's ObjectId
+    app.post("/articles/remove/:id", function(req, res) {
+        var idArticleId = req.params.id;
+        // find the user with id 4
+        Article.
+        findByIdAndRemove(idArticleId, function(err) {
+            if (err) throw err;
+            // we have deleted the user
+            console.log('User deleted!');
+        });
+    });
+
 };

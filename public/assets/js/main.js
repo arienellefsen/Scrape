@@ -42,7 +42,11 @@ $(document).on("click", "#note", function() {
             // Empty the notes section\
             $("#titleinput").val("");
             $("#bodyinput").val("");
-            if (data.note) {
+
+            console.log('data: ' + data);
+            if (!data.note) {
+                console.log('no data');
+            } else {
                 // Place the title of the note in the title input
                 $("#titleinput").val(data.note.title);
                 // Place the body of the note in the body textarea
@@ -54,7 +58,6 @@ $(document).on("click", "#note", function() {
 $(document).on("click", "#save", function() {
     //debugger;
     var idField = $("#idfield").val();
-
     console.log(idField);
     var idArticleId = $(this).idField;
     $.ajax({
@@ -74,5 +77,29 @@ $(document).on("click", "#save", function() {
             $("#titleinput").val("");
             $("#bodyinput").val("");
             $('#status').text('Saved!');
+        });
+});
+
+//Delete note
+$(document).on("click", "#delete", function() {
+    //debugger;
+    var idField = $("#idfield").val();
+    console.log(idField);
+    var idArticleId = $(this).idField;
+    $.ajax({
+            method: "POST",
+            url: "/articles/remove/" + idField,
+            data: {
+                id: idField
+            }
+        })
+        // With that done
+        .done(function(data) {
+            // Log the response
+            console.log(data);
+            location.reload();
+            $("#titleinput").val("");
+            $("#bodyinput").val("");
+            $('#status').text('Deleted!');
         });
 });
