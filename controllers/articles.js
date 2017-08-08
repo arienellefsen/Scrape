@@ -88,15 +88,15 @@ module.exports = function(app) {
 
     // This will grab an article by it's ObjectId
     app.get("/articles/:id", function(req, res) {
-        var articleId = req.params.id;
+        var idArticleId = req.params.id;
         Article
             .findOne({
-                _id: articleId
+                _id: idArticleId
             })
             .populate("note")
             .exec(function(err, doc) {
                 if (err) {
-                    console.log('error find this id: ' + articleId);
+                    console.log('error find this id: ' + idArticleId);
                 } else {
                     res.json(doc);
                     console.log('doc');
