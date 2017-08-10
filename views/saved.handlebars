@@ -1,9 +1,9 @@
 <div class="container-fluid">
     <h1 class="page-title" > Summer Recipes Saved</h1>
-    <nav>
-			<a href='/saved'>Saved Recipes</a>
-            <a href='/'>Home</a>
-       </nav>
+		<nav>
+                    <a href='/' class="menu-link">Home</a>
+			        <a href='/saved' class="menu-link">Saved Recipes</a>
+                </nav>
   <div class="row is-flex">
        {{#each data}}
        <div class="col-sm-3 col-md-3 col-lg-3">
@@ -11,8 +11,8 @@
                 <a href="{{this.link}}" data-title="{{this.id}}" class='title'>{{this.title}}</a>
                 <img src={{this.image}} width="250" height="250" class="thumb-img">
                 <p> {{this.caption}}</p>
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"  data-id="{{this.id}}"id="note">Add Note</button>
-                <br><br><button type="button" class="btn btn-info btn-lg" data-id="{{this.id}}" data-toggle="modal" data-target="#myModal"  data-id="{{this.id}}"id="removesave">Remove from Save</button>
+                <button type="button" class="btn" data-toggle="modal" data-target="#myModal"  data-id="{{this.id}}"id="note">Add Note</button>
+                <br><br><button type="button" class="btn" data-id="{{this.id}}" id="removesave" onclick="javascript:window.location.reload()">Remove from Saved</button>
 
                 </div>
              </div>
@@ -26,11 +26,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title"></h4><div id="status"></div>
+          <h4 class="modal-title">Add notes to your recipe</h4><div id="status"></div>
         </div>
         <div class="modal-body">
              <div class="fields">
-                Note: <textarea name="comment" id="bodyinput">Add a note for this recipe</textarea>
+                Add your note here: <textarea name="comment" id="bodyinput">Add a note for this recipe</textarea>
                 id: <input id='idfield' name='id'><br><br>
             </div>
         </div>

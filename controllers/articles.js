@@ -71,82 +71,58 @@ module.exports = function(app) {
     });
 
 
-    //Add recipes to database and update notes and status
+    //Add recipes to database and update status
     app.post("/recipes/:id", function(req, res) {
-        var newNote = new Note(req.body);
-        console.log(req.body);
-        newNote.save(function(err, doc) {
-            if (err) {
-                console.log('error saving db');
-            } else {
-                Article.findOneAndUpdate({
-                        _id: req.params.id
-                    }, {
-                        note: doc._id,
-                        status: true
-                    })
-                    .exec(function(err, doc) {
-                        if (err) return handleError(err);
-                        res.send(doc);
-                    });
-            }
-        });
+        Article.findOneAndUpdate({
+                _id: req.params.id
+            }, {
+                status: true
+            })
+            .exec(function(err, doc) {
+                if (err) return handleError(err);
+                res.send(doc);
+            });
     });
+
+    //Remove recipes from saved views and update status to false
+    app.post("/recipes-remove/:id", function(req, res) {
+        Article.findOneAndUpdate({
+                _id: req.params.id
+            }, {
+                status: false
+            })
+            .exec(function(err, doc) {
+                if (err) return handleError(err);
+                res.send(doc);
+            });
+    });
+
 
     //Add note to database 
     app.post("/note/:id", function(req, res) {
-        var newNote = new Note(req.body);
-        console.log(req.body);
-        console.log(req.params.id);
+        var newNote = new Note({
+            body: req.body,
+            recipeId: Article.id
+        });
         newNote.save(function(err, doc) {
-            if (err) {
-                console.log('error saving db');
-            } else {
-                Article.findOneAndUpdate({
-                    _id: req.params.id
-                }, {
-                    note: doc._id
-                });
-            }
+
         });
     });
-
-    //Add note to database 
-    app.post("/note-save/:id", function(req, res) {
-        var newNote = new Note(req.body);
-        console.log(req.body);
-        console.log(req.params.id);
-        newNote.save(function(err, doc) {
-            if (err) {
-                console.log('error saving db');
-            } else {
-                Article.findOneAndUpdate({
-                    _id: req.params.id
-                }, {
-                    recipeId: doc._id
-                });
-            }
-        });
-    });
-
 
     // This will grab an article by it's ObjectId
     app.get("/note/:id", function(req, res) {
         var idArticleId = req.params.id;
-        Article
-            .findOne({
-                _id: idArticleId
-            })
-            .populate("note")
-            .exec(function(err, doc) {
-                if (err) {
-                    console.log('error find this id: ' + idArticleId);
-                } else {
-                    res.json(doc);
-                    console.log('doc');
-                }
-            });
+        Article.findOne({ _id: idArticleId }, function(err, doc) {
+            if (err) {
+                console.log('error find this id: ' + idArticleId);
+            } else {
+                res.json(doc);
+                console.log(doc.id);
+            }
+        });
     });
+
+
 
     // This will remove an note by it's ObjectId
     app.post("/articles/remove/:id", function(req, res) {

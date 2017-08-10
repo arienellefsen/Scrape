@@ -11,7 +11,7 @@ var NoteSchema = new Schema({
         type: String
     },
     recipeId: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Article"
     }
 });
