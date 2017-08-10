@@ -27,22 +27,15 @@ $(document).on("click", "#note", function() {
         // With that done
         .done(function(data) {
             $("#bodyinput").val("");
-            console.log('data: ' + data);
-            if (!data.note) {
-                console.log('no data');
-            } else {
-                $("#bodyinput").val(data.note.body);
-            }
+
         });
 });
-
 
 //Save recipe to database
 //Update status to true
 $(document).on("click", "#save", function() {
     //debugger;
     var idArticle = $(this).attr('data-id');
-    console.log('btn id arieen: ' + idArticle);
     $.ajax({
             method: "POST",
             url: "/recipes/" + idArticle,
@@ -56,8 +49,6 @@ $(document).on("click", "#save", function() {
         // With that done
         .done(function(data) {
             // Log the response
-            console.log(data);
-
             $('#myModal').modal('show');
             $('.modal-body').append('<p class="text-modal">Recipe has been saved!</p>');
         });
@@ -79,7 +70,6 @@ $(document).on("click", "#saveNote", function() {
         // With that done
         .done(function(data) {
             // Log the response
-            console.log(data);
             //$("#titleinput").val("");
             // $("#bodyinput").val("");
             $('#status').text('Note saved!');
@@ -103,15 +93,11 @@ $(document).on("click", "#removesave", function() {
         })
         .done(function(data) {
             // Log the response
-            console.log(data);
             $("#titleinput").val("");
             $("#bodyinput").val("");
             $('#status').text('Deleted!');
         });
 });
-
-
-
 
 
 //Delete note
@@ -129,7 +115,6 @@ $(document).on("click", "#delete", function() {
         })
         .done(function(data) {
             // Log the response
-            console.log(data);
             $("#titleinput").val("");
             $("#bodyinput").val("");
             $('#status').text('Deleted!');

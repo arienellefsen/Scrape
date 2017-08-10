@@ -100,13 +100,31 @@ module.exports = function(app) {
 
     //Add note to database 
     app.post("/note/:id", function(req, res) {
-        var newNote = new Note({
-            body: req.body,
-            recipeId: Article.id
+        var articleId = req.params.id;
+        var newNote = new Note(req.body);
+        // And save the new note the db
+        newNote.save(function(error, doc) {
+            // Log any errors
+            if (error) {
+                console.log(error);
+            }
+            // Otherwise
+            else {
+                // Use the article id to find and update it's note
+                Article.findOneAndUpdate({ "_id": articleId }, { "note": doc._id })
+                    // Execute the above query
+                    .exec(function(err, doc) {
+                        // Log any errors
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            // Or send the document to the browser
+                            res.send(doc);
+                        }
+                    });
+            }
         });
-        newNote.save(function(err, doc) {
 
-        });
     });
 
     // This will grab an article by it's ObjectId

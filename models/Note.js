@@ -9,10 +9,6 @@ var NoteSchema = new Schema({
     // Just a string
     body: {
         type: String
-    },
-    recipeId: {
-        type: Schema.Types.ObjectId,
-        ref: "Article"
     }
 });
 
