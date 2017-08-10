@@ -1,8 +1,6 @@
 <div class="container-fluid">
-    <h1 class="page-title" > Summer Recipes</h1>
+    <h1 class="page-title" > Summer Recipes Saved</h1>
     <nav>
-        
-            <button id="scrape" class="center-block"> Scrape Article </button>
 			<a href='/saved'>Saved Recipes</a>
             <a href='/'>Home</a>
        </nav>
@@ -13,7 +11,9 @@
                 <a href="{{this.link}}" data-title="{{this.id}}" class='title'>{{this.title}}</a>
                 <img src={{this.image}} width="250" height="250" class="thumb-img">
                 <p> {{this.caption}}</p>
-                <button type="button" class="btn btn-info btn-lg" data-id="{{this.id}}" data-toggle="modal" data-target="#myModal"  data-id="{{this.id}}"id="save">Save Recipe</button>
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"  data-id="{{this.id}}"id="note">Add Note</button>
+                <br><br><button type="button" class="btn btn-info btn-lg" data-id="{{this.id}}" data-toggle="modal" data-target="#myModal"  data-id="{{this.id}}"id="removesave">Remove from Save</button>
+
                 </div>
              </div>
         {{/each}}
@@ -21,7 +21,7 @@
 
  <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-sm" >
+    <div class="modal-dialog modal-md" >
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -29,14 +29,14 @@
           <h4 class="modal-title"></h4><div id="status"></div>
         </div>
         <div class="modal-body">
-            <div class="fields">
-                <div id="scrapetotal"></div>
-        
+             <div class="fields">
+                Note: <textarea name="comment" id="bodyinput">Add a note for this recipe</textarea>
+                id: <input id='idfield' name='id'><br><br>
             </div>
         </div>
 
         <div class="modal-footer">
-        
+            <button type="button" class="btn btn-default" id="saveNote">Save Note</button>
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:window.location.reload()">Close</button>
         </div>
       </div>

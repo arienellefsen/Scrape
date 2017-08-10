@@ -5,14 +5,15 @@ var Schema = mongoose.Schema;
 
 // Create the Note schema
 var NoteSchema = new Schema({
-  // Just a string
-  title: {
-    type: String
-  },
-  // Just a string
-  body: {
-    type: String
-  }
+    // Just a string
+    // Just a string
+    body: {
+        type: String
+    },
+    recipeId: {
+        type: Schema.ObjectId,
+        ref: "Article"
+    }
 });
 
 // Remember, Mongoose will automatically save the ObjectIds of the notes

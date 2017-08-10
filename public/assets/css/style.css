@@ -1,0 +1,39 @@
+.card {
+    width: 80%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.row.is-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row.is-flex>[class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.is-flex .box {
+    background: none;
+    position: static;
+}
+
+.is-flex [class*="col-"] {
+    background: #fff;
+}
+
+a.title:link {
+    font-size: 18px;
+    color: #ccc;
+}
+
+.thumb-img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 24px;
+}

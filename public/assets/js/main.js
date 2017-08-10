@@ -8,28 +8,23 @@ $(document).on("click", "#scrape", function() {
         })
         // With that done, add the note information to the page
         .done(function(data) {
-            alert('data');
-            location.reload();
-            window.location.href = "/articles";
-            console.log(data);
+            $('#myModal').modal('show');
+            $('.modal-title').append('<h1>Total of recipes</h1>');
+            $('.modal-body').append('<p>get total</p>');
         });
 });
 
 //save note form
-
 $(document).on("click", "#note", function() {
     var idArticle = $(this).attr('data-id');
-    console.log('btn id:' + idArticle);
-    $("#titleinput").val("");
+    console.log('btn id recipe:' + idArticle);
     $("#bodyinput").val("");
     $("#idfield").val(idArticle);
-
     $.ajax({
             method: "get",
-            url: "/articles/" + idArticle,
+            url: "/note/" + idArticle,
             data: {
                 // Value taken from title input
-                title: $("#titleinput").val(),
                 // Value taken from note textarea
                 body: $("#bodyinput").val()
             }
@@ -40,29 +35,29 @@ $(document).on("click", "#note", function() {
             console.log(data);
             //console.log(data.note.title);
             // Empty the notes section\
-            $("#titleinput").val("");
             $("#bodyinput").val("");
-
             console.log('data: ' + data);
+
             if (!data.note) {
                 console.log('no data');
             } else {
                 // Place the title of the note in the title input
-                $("#titleinput").val(data.note.title);
                 // Place the body of the note in the body textarea
                 $("#bodyinput").val(data.note.body);
             }
         });
 });
 
+
+//Save recipe to database
+//Update status to true
 $(document).on("click", "#save", function() {
     //debugger;
-    var idField = $("#idfield").val();
-    console.log(idField);
-    var idArticleId = $(this).idField;
+    var idArticle = $(this).attr('data-id');
+    console.log('btn id arieen: ' + idArticle);
     $.ajax({
             method: "POST",
-            url: "/articles/" + idField,
+            url: "/recipes/" + idArticle,
             data: {
                 // Value taken from title input
                 title: $("#titleinput").val(),
@@ -74,9 +69,33 @@ $(document).on("click", "#save", function() {
         .done(function(data) {
             // Log the response
             console.log(data);
-            $("#titleinput").val("");
-            $("#bodyinput").val("");
-            $('#status').text('Saved!');
+
+            $('#myModal').modal('show');
+            $('.modal-title').append('<h1>Recipe has been saved!</h1>');
+
+        });
+});
+
+//Save note to database
+$(document).on("click", "#saveNote", function() {
+    //debugger;
+    var fieldId = $('#idfield').val();
+    $.ajax({
+            method: "POST",
+            url: "/note-save/" + fieldId,
+            data: {
+                // Value taken from title input
+                // Value taken from note textarea
+                body: $("#bodyinput").val()
+            }
+        })
+        // With that done
+        .done(function(data) {
+            // Log the response
+            console.log(data);
+            //$("#titleinput").val("");
+            // $("#bodyinput").val("");
+            $('#status').text('Note saved!');
         });
 });
 
@@ -86,6 +105,9 @@ $(document).on("click", "#delete", function() {
     var idField = $("#idfield").val();
     console.log(idField);
     var idArticleId = $(this).idField;
+    $("#titleinput").val("");
+    $("#bodyinput").val("");
+
     $.ajax({
             method: "POST",
             url: "/articles/remove/" + idField,
@@ -93,11 +115,9 @@ $(document).on("click", "#delete", function() {
                 id: idField
             }
         })
-        // With that done
         .done(function(data) {
             // Log the response
             console.log(data);
-            location.reload();
             $("#titleinput").val("");
             $("#bodyinput").val("");
             $('#status').text('Deleted!');

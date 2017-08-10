@@ -7,9 +7,6 @@ var request = require('request');
 // =============================================================
 module.exports = function(app) {
     //Route Home
-    app.get("/", function(req, res) {
-        res.render('index');
-    });
 
     app.get("/scrape", function(req, res) {
         // First, we grab the body of the html with request
@@ -27,12 +24,6 @@ module.exports = function(app) {
                 result.link = $(this).children('.media-body').children('.caption').find('a').attr('href');
                 result.image = $(this).children('.media-img').children('.component').attr('data-src');
                 result.caption = $(this).children('.media-body').children('.caption').text();
-
-                console.log("$$$$$$$$$$$$" + result.title + "$$$$$$$$$$$$");
-                console.log("######" + result.image + "#####");
-                console.log("######" + result.caption + "#####");
-                console.log("@@@@@" + result.link + "@@@@");
-
                 // Using our Article model, create a new entry
                 // This effectively passes the result object to the entry (and the title and link)
                 var entry = new Article(result);
@@ -50,13 +41,13 @@ module.exports = function(app) {
             });
         });
         // Tell the browser that we finished scraping the text
-        res.redirect("/articles");
+        res.redirect("/");
     });
 
     // This will get the articles we scraped from the mongoDB
-    app.get("/articles", function(req, res) {
+    app.get("/", function(req, res) {
         // Find all notes in the note collection with our Note model
-        Article.find({}, function(err, data) {
+        Article.find({ 'status': false }, function(err, data) {
             if (err) return handleError(err);
             articlesResult = {
                 data: data
@@ -65,8 +56,23 @@ module.exports = function(app) {
         })
     });
 
-    // Create a new note or replace an existing note
-    app.post("/articles/:id", function(req, res) {
+    //Route to diosplay all the saved rescipes
+
+    // This will get the articles we scraped from the mongoDB
+    app.get("/saved", function(req, res) {
+        // Find all notes in the note collection with our Note model
+        Article.find({ 'status': 'true' }, function(err, data) {
+            if (err) return handleError(err);
+            recipeResult = {
+                data: data
+            }
+            res.render('saved', recipeResult);
+        })
+    });
+
+
+    //Add recipes to database and update notes and status
+    app.post("/recipes/:id", function(req, res) {
         var newNote = new Note(req.body);
         console.log(req.body);
         newNote.save(function(err, doc) {
@@ -76,7 +82,8 @@ module.exports = function(app) {
                 Article.findOneAndUpdate({
                         _id: req.params.id
                     }, {
-                        note: doc._id
+                        note: doc._id,
+                        status: true
                     })
                     .exec(function(err, doc) {
                         if (err) return handleError(err);
@@ -86,8 +93,45 @@ module.exports = function(app) {
         });
     });
 
+    //Add note to database 
+    app.post("/note/:id", function(req, res) {
+        var newNote = new Note(req.body);
+        console.log(req.body);
+        console.log(req.params.id);
+        newNote.save(function(err, doc) {
+            if (err) {
+                console.log('error saving db');
+            } else {
+                Article.findOneAndUpdate({
+                    _id: req.params.id
+                }, {
+                    note: doc._id
+                });
+            }
+        });
+    });
+
+    //Add note to database 
+    app.post("/note-save/:id", function(req, res) {
+        var newNote = new Note(req.body);
+        console.log(req.body);
+        console.log(req.params.id);
+        newNote.save(function(err, doc) {
+            if (err) {
+                console.log('error saving db');
+            } else {
+                Article.findOneAndUpdate({
+                    _id: req.params.id
+                }, {
+                    recipeId: doc._id
+                });
+            }
+        });
+    });
+
+
     // This will grab an article by it's ObjectId
-    app.get("/articles/:id", function(req, res) {
+    app.get("/note/:id", function(req, res) {
         var idArticleId = req.params.id;
         Article
             .findOne({
