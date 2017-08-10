@@ -1,0 +1,64 @@
+.card {
+    width: 80%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.row.is-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row.is-flex>[class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.is-flex .box {
+    background: none;
+    position: static;
+}
+
+.is-flex [class*="col-"] {
+    background: #fff;
+}
+
+a.title:link {
+    font-size: 18px;
+    color: #999;
+}
+
+.thumb-img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 24px;
+}
+
+nav {
+    text-align: center;
+}
+
+a.menu-link:link {
+    font-size: 18px;
+    padding-right: 20px;
+    margin-top: 20px;
+}
+
+#scrape {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+p.text-modal {
+    text-align: center;
+    font-size: 18px;
+}
+
+textarea {
+    width: 550px;
+    height: 100px;
+}

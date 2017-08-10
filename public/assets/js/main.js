@@ -8,58 +8,37 @@ $(document).on("click", "#scrape", function() {
         })
         // With that done, add the note information to the page
         .done(function(data) {
-            alert('data');
-            location.reload();
-            window.location.href = "/articles";
-            console.log(data);
+            $('#myModal').modal('show');
+            $('.modal-body').append('<p class="text-modal">Enjoy delicious recipes!!</p>');
         });
 });
 
 //save note form
-
 $(document).on("click", "#note", function() {
     var idArticle = $(this).attr('data-id');
-    console.log('btn id:' + idArticle);
-    $("#titleinput").val("");
-    $("#bodyinput").val("");
     $("#idfield").val(idArticle);
-
     $.ajax({
             method: "get",
-            url: "/articles/" + idArticle,
+            url: "/note/" + idArticle,
             data: {
-                // Value taken from title input
-                title: $("#titleinput").val(),
-                // Value taken from note textarea
                 body: $("#bodyinput").val()
             }
         })
         // With that done
         .done(function(data) {
-            // Log the response
-            console.log(data);
-            //console.log(data.note.title);
-            // Empty the notes section\
-            $("#titleinput").val("");
             $("#bodyinput").val("");
-            if (data.note) {
-                // Place the title of the note in the title input
-                $("#titleinput").val(data.note.title);
-                // Place the body of the note in the body textarea
-                $("#bodyinput").val(data.note.body);
-            }
+
         });
 });
 
+//Save recipe to database
+//Update status to true
 $(document).on("click", "#save", function() {
     //debugger;
-    var idField = $("#idfield").val();
-
-    console.log(idField);
-    var idArticleId = $(this).idField;
+    var idArticle = $(this).attr('data-id');
     $.ajax({
             method: "POST",
-            url: "/articles/" + idField,
+            url: "/recipes/" + idArticle,
             data: {
                 // Value taken from title input
                 title: $("#titleinput").val(),
@@ -70,9 +49,74 @@ $(document).on("click", "#save", function() {
         // With that done
         .done(function(data) {
             // Log the response
-            console.log(data);
+            $('#myModal').modal('show');
+            $('.modal-body').append('<p class="text-modal">Recipe has been saved!</p>');
+        });
+});
+
+//Save note to database
+$(document).on("click", "#saveNote", function() {
+    //debugger;
+    var fieldId = $('#idfield').val();
+    $.ajax({
+            method: "POST",
+            url: "/note/" + fieldId,
+            data: {
+                // Value taken from title input
+                // Value taken from note textarea
+                body: $("#bodyinput").val()
+            }
+        })
+        // With that done
+        .done(function(data) {
+            // Log the response
+            //$("#titleinput").val("");
+            // $("#bodyinput").val("");
+            $('#status').text('Note saved!');
+        });
+});
+
+
+//Delete from saved 
+$(document).on("click", "#removesave", function() {
+
+    var idArticle = $(this).attr('data-id');
+    $("#titleinput").val("");
+    $("#bodyinput").val("");
+
+    $.ajax({
+            method: "POST",
+            url: "/recipes-remove/" + idArticle,
+            data: {
+                id: idArticle
+            }
+        })
+        .done(function(data) {
+            // Log the response
             $("#titleinput").val("");
             $("#bodyinput").val("");
-            $('#status').text('Saved!');
+            $('#status').text('Deleted!');
+        });
+});
+
+
+//Delete note
+$(document).on("click", "#delete", function() {
+    var idArticle = $(this).attr('data-id');
+    $("#titleinput").val("");
+    $("#bodyinput").val("");
+
+    $.ajax({
+            method: "POST",
+            url: "/articles/remove/" + idArticle,
+            data: {
+                id: idField
+            }
+        })
+        .done(function(data) {
+            // Log the response
+            $("#titleinput").val("");
+            $("#bodyinput").val("");
+            $('#status').text('Deleted!');
         });
 });
