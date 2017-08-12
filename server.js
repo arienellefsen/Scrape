@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
+var PORT = process.env.PORT || 8080;
 // Make public a static dir
 app.use(express.static("public"));
 
@@ -47,6 +48,6 @@ db.once("open", function() {
 require("./controllers/articles.js")(app);
 
 // Listen on port 3000
-app.listen(3000, function() {
+app.listen(PORT, function() {
     console.log("App running on port 3000!");
 });
