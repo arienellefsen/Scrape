@@ -102,18 +102,25 @@ module.exports = function(app) {
     app.post("/note/:id", function(req, res) {
         var articleId = req.params.id;
         var newNote = new Note(req.body);
+        var noteArray = [];
         // And save the new note the db
         newNote.save(function(error, doc) {
+            //noteArray.push(doc.id);
             // Log any errors
             if (error) {
                 console.log(error);
             }
             // Otherwise
             else {
+
                 // Use the article id to find and update it's note
-                Article.findOneAndUpdate({ "_id": articleId }, { "note": doc._id })
+                Article.findOneAndUpdate({ "_id": articleId },
+
+                        { $push: { "noteArray": doc._id } }, { new: true }
+                    )
                     // Execute the above query
                     .exec(function(err, doc) {
+                        console.log(doc);
                         // Log any errors
                         if (err) {
                             console.log(err);
@@ -129,29 +136,39 @@ module.exports = function(app) {
 
     // This will grab an article by it's ObjectId
     app.get("/note/:id", function(req, res) {
-        var idArticleId = req.params.id;
-        Article.findOne({ _id: idArticleId }, function(err, doc) {
-            if (err) {
-                console.log('error find this id: ' + idArticleId);
-            } else {
-                res.json(doc);
-                console.log(doc.id);
-            }
-        });
+        var articleId = req.params.id;
+
+        Article.find({ "_id": articleId })
+            .populate("noteArray")
+            .exec(function(err, docs) {
+                if (!err) {
+                    notesData = {
+                        note: docs
+                    }
+                    res.json(docs);
+                    //res.render('saved', notesData)
+                } else {
+                    res.send("Error finding article " + req.params.id);
+                }
+            });
     });
+
 
 
 
     // This will remove an note by it's ObjectId
-    app.post("/articles/remove/:id", function(req, res) {
-        var idArticleId = req.params.id;
-        // find the user with id 4
-        Article.
-        findByIdAndRemove(idArticleId, function(err) {
+    app.get("/remove-note/:id", function(req, res) {
+        var noteId = req.params.id;
+        console.log('noteId: ' + noteId)
+            // find the user with id 4
+        Note.
+        findOneAndRemove({ _id: noteId }, function(err) {
             if (err) throw err;
             // we have deleted the user
-            console.log('User deleted!');
+            console.log('note deleted!');
+            res.redirect('/')
         });
     });
+
 
 };
