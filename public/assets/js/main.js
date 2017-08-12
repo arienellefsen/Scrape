@@ -13,10 +13,13 @@ $(document).on("click", "#scrape", function() {
         });
 });
 
-//save note form
+//get article id and populate field
 $(document).on("click", "#note", function() {
     var idArticle = $(this).attr('data-id');
     $("#idfield").val(idArticle);
+
+    console.log('idArticle' + idArticle);
+
     $.ajax({
             method: "get",
             url: "/note/" + idArticle,
@@ -26,10 +29,38 @@ $(document).on("click", "#note", function() {
         })
         // With that done
         .done(function(data) {
-            $("#bodyinput").val("");
+            var arrayNote = data[0].noteArray;
+
+            console.log(data);
+
+            for (var i = 0; i < arrayNote.length; i++) {
+                console.log('ele: ' + arrayNote[i].body);
+                $('#savednotes').append(arrayNote[i].body + "<button id='remove-note' data-nodeId='" + arrayNote[i]._id + "'>x</button><br>");
+            }
 
         });
 });
+
+
+//Remove Note
+
+$(document).on("click", "#remove-note", function() {
+    var noteId = $(this).attr('data-nodeId');
+    $.ajax({
+            method: "GET",
+            url: "/remove-note/" + noteId,
+            data: {
+                id: noteId
+            }
+        })
+        // With that done, add the note information to the page
+        .done(function(data) {
+            console.log('removed!')
+            window.location.reload();
+        });
+});
+
+
 
 //Save recipe to database
 //Update status to true
@@ -57,7 +88,9 @@ $(document).on("click", "#save", function() {
 //Save note to database
 $(document).on("click", "#saveNote", function() {
     //debugger;
+
     var fieldId = $('#idfield').val();
+    console.log('id' + fieldId);
     $.ajax({
             method: "POST",
             url: "/note/" + fieldId,
@@ -69,10 +102,19 @@ $(document).on("click", "#saveNote", function() {
         })
         // With that done
         .done(function(data) {
+            console.log(data);
+            if (data = 'null') {
+                $('#title-notes').text('This recipes has notes!');
+            } else {
+                $('#title-notes').text('No notes yet!');
+            }
+
             // Log the response
             //$("#titleinput").val("");
             // $("#bodyinput").val("");
             $('#status').text('Note saved!');
+            window.location.reload();
+
         });
 });
 

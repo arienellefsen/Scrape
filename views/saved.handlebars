@@ -30,17 +30,22 @@
         </div>
         <div class="modal-body">
              <div class="fields">
+               
                 Add your note here: <textarea name="comment" id="bodyinput">Add a note for this recipe</textarea>
-                id: <input id='idfield' name='id'><br><br>
-                <h2> Existing Notes</h2>
-                <div id="savednotes"></div>
+                 <input id='idfield' name='id' hidden><br><br>
+                <h2 id="title-notes"></h2>
+                <div id="savednotes">
+                   <p> </p>
+
+                </div>
+
 
             </div>
         </div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-default" id="saveNote">Save Note</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:window.location.reload()">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
         </div>
       </div>
     </div>

@@ -62,3 +62,7 @@ textarea {
     width: 550px;
     height: 100px;
 }
+
+#savednotes {
+    width: 500px;
+}
