@@ -31,7 +31,7 @@ app.set("view engine", "handlebars");
 
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/scrapeArticles");
+mongoose.connect("mongodb://heroku_t5wpqwl8:ctpgelbtcm86l2vuut6040o7q2@ds145639.mlab.com:45639/heroku_t5wpqwl8");
 var db = mongoose.connection;
 
 // Show any mongoose errors
