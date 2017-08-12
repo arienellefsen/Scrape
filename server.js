@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
+var PORT = process.env.PORT || 8080;
 // Make public a static dir
 app.use(express.static("public"));
 
@@ -28,7 +29,6 @@ var exphbs = require("express-handlebars");
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-
 
 // Database configuration with mongoose
 mongoose.connect("mongodb://heroku_t5wpqwl8:ctpgelbtcm86l2vuut6040o7q2@ds145639.mlab.com:45639/heroku_t5wpqwl8");
@@ -47,6 +47,6 @@ db.once("open", function() {
 require("./controllers/articles.js")(app);
 
 // Listen on port 3000
-app.listen(3000, function() {
+app.listen(PORT, function() {
     console.log("App running on port 3000!");
 });
