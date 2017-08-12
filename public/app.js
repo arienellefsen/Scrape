@@ -21,7 +21,6 @@ $(document).on("click", "p", function() {
         })
         // With that done, add the note information to the page
         .done(function(data) {
-            console.log(data);
             // The title of the article
             $("#notes").append("<h2>" + data.title + "</h2>");
             // An input to enter a new title
@@ -60,7 +59,6 @@ $(document).on("click", "#savenote", function() {
         // With that done
         .done(function(data) {
             // Log the response
-            console.log(data);
             // Empty the notes section
             $("#notes").empty();
         });
