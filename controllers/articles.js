@@ -47,7 +47,9 @@ module.exports = function(app) {
     // This will get the articles we scraped from the mongoDB
     app.get("/", function(req, res) {
         // Find all notes in the note collection with our Note model
-        Article.find({ 'status': false }, function(err, data) {
+        Article.find({
+            'status': false
+        }, function(err, data) {
             if (err) return handleError(err);
             articlesResult = {
                 data: data
@@ -56,12 +58,14 @@ module.exports = function(app) {
         })
     });
 
-    //Route to diosplay all the saved rescipes
+    //Route to display all the saved rescipes
 
     // This will get the articles we scraped from the mongoDB
     app.get("/saved", function(req, res) {
         // Find all notes in the note collection with our Note model
-        Article.find({ 'status': 'true' }, function(err, data) {
+        Article.find({
+            'status': 'true'
+        }, function(err, data) {
             if (err) return handleError(err);
             recipeResult = {
                 data: data
@@ -114,9 +118,17 @@ module.exports = function(app) {
             else {
 
                 // Use the article id to find and update it's note
-                Article.findOneAndUpdate({ "_id": articleId },
+                Article.findOneAndUpdate({
+                            "_id": articleId
+                        },
 
-                        { $push: { "noteArray": doc._id } }, { new: true }
+                        {
+                            $push: {
+                                "noteArray": doc._id
+                            }
+                        }, {
+                            new: true
+                        }
                     )
                     // Execute the above query
                     .exec(function(err, doc) {
@@ -137,8 +149,9 @@ module.exports = function(app) {
     // This will grab an article by it's ObjectId
     app.get("/note/:id", function(req, res) {
         var articleId = req.params.id;
-
-        Article.find({ "_id": articleId })
+        Article.find({
+                "_id": articleId
+            })
             .populate("noteArray")
             .exec(function(err, docs) {
                 if (!err) {
@@ -153,16 +166,15 @@ module.exports = function(app) {
             });
     });
 
-
-
-
     // This will remove an note by it's ObjectId
     app.get("/remove-note/:id", function(req, res) {
         var noteId = req.params.id;
         console.log('noteId: ' + noteId)
             // find the user with id 4
         Note.
-        findOneAndRemove({ _id: noteId }, function(err) {
+        findOneAndRemove({
+            _id: noteId
+        }, function(err) {
             if (err) throw err;
             // we have deleted the user
             console.log('note deleted!');
